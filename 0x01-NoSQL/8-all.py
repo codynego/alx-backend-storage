@@ -6,8 +6,7 @@ a python function that list all document in a collection
 
 
 def list_all(mongo_collection):
-    all_doc = []
-
-    for doc in mongo_collection.find():
-        all_doc.append(doc)
+    all_doc = mongo_collection.find():
+        if all_doc.count() == 0:
+            return []
     return all_doc

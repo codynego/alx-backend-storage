@@ -13,5 +13,4 @@ document based on the name:
 
 def update_topics(mongo_collection, name, topics):
     condition = {"name": name}
-    result = mongo_collection.updateMany(condition, {$set, {"topics": topics}})
-    return result.modified_count
+    mongo_collection.update_many(condition, {$set, {"topics": topics}})
