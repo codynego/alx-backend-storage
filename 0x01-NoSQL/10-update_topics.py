@@ -13,4 +13,5 @@ document based on the name:
 
 def update_topics(mongo_collection, name, topics):
     condition = {"name": name}
-    mongo_collection.update_many(condition, {$set, {"topics": topics}})
+    query = {$set, {"topics": topics}}
+    mongo_collection.update_many(condition, query)
