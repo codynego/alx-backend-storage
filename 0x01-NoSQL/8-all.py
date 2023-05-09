@@ -3,6 +3,7 @@
 """
 a python function that list all document in a collection
 """
+import pymongo
 
 
 def list_all(mongo_collection):
