@@ -5,6 +5,45 @@ Writing strings to Redis
 import redis
 from uuid import uuid4
 from typing import List, Union, Callable, Optional
+from functools import wraps
+
+
+def call_history(method: Callable) -> Callable:
+    """
+    decorator to store the history of inputs
+    and outputs for a particular function
+    """
+    name_input = method.__qualname__ + ":input"
+    name_output = method.__qualname__ + ":output"
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """
+        a wrapper
+        """
+        inputs = str(args)
+        self._redis.rpush(method.__qualname__ + ":input", inputs)
+        outputs = str(method(self, *args, **kwargs))
+        self._redis.rpush(name_output, outputs)
+        return outputs
+    return wrapper
+
+
+def count_calls(method: Callable) -> Callable:
+    """
+    a method that counts how many times methods
+    of the Cache class are called.
+    """
+    key = method.__qualname__
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """
+        a wrapper
+        """
+        self._redis.incr("key")
+        return method(self, *args, **kwargs)
+    return wrapper
 
 
 class Cache:
@@ -18,6 +57,8 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @call_history
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
         a method saves or set a data to redis
@@ -30,7 +71,8 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable] = None) -> Union[str, int, bytes, float]:
+    def get(self, key: str,
+            fn: Optional[Callable] = None) -> Union[str, int, bytes, float]:
         """
         A method gets a value from redis
         Args:
