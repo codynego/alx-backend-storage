@@ -4,11 +4,12 @@ Implementing an expiring web cache and tracker
 """
 from functools import wraps
 import redis
+from typing import Callable
 import requests
 cache = redis.Redis()
 
 
-def page_count(method):
+def page_count(method: Callable) -> Callable:
     """
     get page count
     """
