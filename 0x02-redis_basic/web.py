@@ -4,9 +4,9 @@ Implementing an expiring web cache and tracker
 """
 from functools import wraps
 import redis
-from typing import List, Union
 import requests
 cache = redis.Redis()
+
 
 def page_count(method):
     """
@@ -21,7 +21,7 @@ def page_count(method):
         cache_key = "cached:" + url
         cache_data = cache.get(cache_key)
         htmlpage = method(url)
-        if cache_data == None:
+        if cache_data is None:
             cache.set(cache_key, htmlpage)
 
         count_key = "count:" + url
@@ -33,5 +33,8 @@ def page_count(method):
 
 @page_count
 def get_page(url: str) -> str:
+    """
+    get web page content
+    """
     page = requests.get(url)
     return page.text
