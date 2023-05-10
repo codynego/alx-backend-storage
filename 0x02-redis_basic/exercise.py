@@ -43,3 +43,24 @@ class Cache:
         if fn:
             value = fn(value)
         return value
+
+    def get_str(self, key: str) -> str:
+        """
+        get the string value from redis
+        Args:
+            key (str): the key
+        """
+
+        value = self._redis.get(key)
+        return str(value.decode("utf-8"))
+
+    def get_int(self, key: str) -> int:
+        """
+        get the integer value from redis
+        Args:
+            key (str): the key
+        Return:
+            return the int of value
+        """
+        value = self._redis.get(key)
+        return int(value.decode("utf-8"))
