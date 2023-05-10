@@ -61,7 +61,7 @@ def replay(method: str) -> str:
     for input_str, output_str in zip(inputs, outputs):
         input_value = input_str.decode('utf-8')  # Decode bytes to string
         output_value = output_str.decode('utf-8')  # Decode bytes to string
-        print("{}(*{},) -> {}".format(
+        print("{}(*{}) -> {}".format(
             method.__qualname__, input_value, output_value))
 
 
