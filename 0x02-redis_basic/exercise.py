@@ -56,7 +56,7 @@ def replay(method: str) -> str:
 
     inputs = r.lrange("{}:inputs".format(method.__qualname__), 0, -1)
     outputs = r.lrange("{}:outputs".format(method.__qualname__), 0, -1)
-    print("{} was called {} times".format(
+    print("{} was called {} times:".format(
         method.__qualname__, cache.decode('utf-8')))
     for input_str, output_str in zip(inputs, outputs):
         input_value = input_str.decode('utf-8')  # Decode bytes to string
